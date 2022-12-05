@@ -1,2 +1,2 @@
 # Automation-QA
-Examples of automated tests(web)
+Examples of different automated tests(web)

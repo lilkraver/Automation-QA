@@ -1,2 +1,2 @@
 # Automation-QA
-Examples of DIFFERENT automated tests(web)
+Examples of using DIFFERENT instruments for automated tests(web)

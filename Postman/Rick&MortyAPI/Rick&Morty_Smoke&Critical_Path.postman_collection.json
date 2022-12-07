@@ -1,0 +1,705 @@
+{
+	"info": {
+		"_postman_id": "408eb92d-dce8-419b-8976-ae0c23dd1137",
+		"name": "Rick&Morty_Smoke&Critical_Path",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18036617"
+	},
+	"item": [
+		{
+			"name": "Get all characters",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Main properties of list are constant\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.info.count).to.eql(826);\r",
+							"    pm.expect(jsonData.info.pages).to.eql(42);\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    type: 'object',\r",
+							"  properties: {\r",
+							"      info: {type: 'object', \r",
+							"      properties: {count: {type:'number'},\r",
+							"        pages:{type:'number'},\r",
+							"        next:{type:['string', 'null']},\r",
+							"        prev:{type:['string', 'null']}\r",
+							"        }\r",
+							"        },\r",
+							"      },\r",
+							"      results: {type: 'array', items:{type:'object'}},\r",
+							"};\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('JSON structure is valid', function () {\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rickandmortyapi.com/api/character?page=42",
+					"protocol": "https",
+					"host": [
+						"rickandmortyapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"character"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "42"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a single character",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"    type: 'object',\r",
+							"  properties: {\r",
+							"      id: {type: 'number'},\r",
+							"      name: {type: 'string'},\r",
+							"      status: {type: 'string'},\r",
+							"      species: {type: 'string'},\r",
+							"      type: {type: 'string'},\r",
+							"      gender: {type: 'string'},\r",
+							"      origin: {type: 'object', properties: {\r",
+							"          name: {type: 'string'}, url: {type: 'string'}}},\r",
+							"      location: {type: 'object', properties: {\r",
+							"          name: {type: 'string'}, url: {type: 'string'}}},\r",
+							"      image: {type: 'string'},\r",
+							"      episode: {type: 'array', items: {type: 'string'}},\r",
+							"      url: {type: 'string'},\r",
+							"      created: {type: 'string'}\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('JSON structure is valid', function () {\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ID is valid\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.eql(5);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rickandmortyapi.com/api/character/5",
+					"protocol": "https",
+					"host": [
+						"rickandmortyapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"character",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get multiple characters",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"IDs are as expected\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0].id).to.eql(3);\r",
+							"    pm.expect(jsonData[1].id).to.eql(18);\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    type: 'array',\r",
+							"  items: {type: 'object'}\r",
+							"};\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('JSON structure is valid', function () {\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rickandmortyapi.com/api/character/3,18",
+					"protocol": "https",
+					"host": [
+						"rickandmortyapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"character",
+						"3,18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter characters",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"    type: 'object',\r",
+							"  properties: {\r",
+							"      info: {type: 'object', \r",
+							"      properties: {count: {type:'number'},\r",
+							"        pages:{type:'number'},\r",
+							"        next:{type:['string', 'null']},\r",
+							"        prev:{type:['string', 'null']}\r",
+							"        }\r",
+							"        },\r",
+							"      },\r",
+							"      results: {type: 'array', items:{type:'object'}},\r",
+							"};\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('JSON structure is valid', function () {\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Params are valid\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData.results[0].name).to.include('Rick');\r",
+							"    pm.expect(jsonData.results[0].status).to.eql('Dead');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rickandmortyapi.com/api/character/?name=rick&status=dead",
+					"protocol": "https",
+					"host": [
+						"rickandmortyapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"character",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "rick"
+						},
+						{
+							"key": "status",
+							"value": "dead"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all locations",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"    type: 'object',\r",
+							"  properties: {\r",
+							"      info: {type: 'object', \r",
+							"      properties: {count: {type:'number'},\r",
+							"        pages:{type:'number'},\r",
+							"        next:{type:['string', 'null']},\r",
+							"        prev:{type:['string', 'null']}\r",
+							"        }\r",
+							"        },\r",
+							"      },\r",
+							"      results: {type: 'array', items:{type:'object'}},\r",
+							"};\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('JSON structure is valid', function () {\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Main properties of list are constant\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.info.count).to.eql(126);\r",
+							"    pm.expect(jsonData.info.pages).to.eql(7);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rickandmortyapi.com/api/location",
+					"protocol": "https",
+					"host": [
+						"rickandmortyapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"location"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a single location",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"    type: 'object',\r",
+							"  properties: {\r",
+							"      id: {type: 'number'},\r",
+							"      name: {type: 'string'},\r",
+							"      type: {type: 'string'},\r",
+							"      dimension: {type: 'string'},\r",
+							"      residents: {type: 'array', items: {type: 'string'}},\r",
+							"      url: {type: 'string'},\r",
+							"      created: {type: 'string'}\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('JSON structure is valid', function () {\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ID is valid\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.eql(5);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rickandmortyapi.com/api/location/5",
+					"protocol": "https",
+					"host": [
+						"rickandmortyapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"location",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get multiple locations",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"IDs are as expected\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0].id).to.eql(5);\r",
+							"    pm.expect(jsonData[1].id).to.eql(20);\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    type: 'array',\r",
+							"  items: {type: 'object'}\r",
+							"};\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('JSON structure is valid', function () {\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rickandmortyapi.com/api/location/5,20",
+					"protocol": "https",
+					"host": [
+						"rickandmortyapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"location",
+						"5,20"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter locations",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"    type: 'object',\r",
+							"  properties: {\r",
+							"      info: {type: 'object', \r",
+							"      properties: {count: {type:'number'},\r",
+							"        pages:{type:'number'},\r",
+							"        next:{type:['string', 'null']},\r",
+							"        prev:{type:['string', 'null']}\r",
+							"        }\r",
+							"        },\r",
+							"      },\r",
+							"      results: {type: 'array', items:{type:'object'}},\r",
+							"};\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('JSON structure is valid', function () {\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Params are valid\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData.results[0].type).to.eql('Microverse');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rickandmortyapi.com/api/location/?type=Microverse",
+					"protocol": "https",
+					"host": [
+						"rickandmortyapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"location",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "Microverse"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all episodes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Main properties of list are constant\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.info.count).to.eql(51);\r",
+							"    pm.expect(jsonData.info.pages).to.eql(3);\r",
+							"});\r",
+							"\r",
+							"var schema = {\r",
+							"    type: 'object',\r",
+							"  properties: {\r",
+							"      info: {type: 'object', \r",
+							"      properties: {count: {type:'number'},\r",
+							"        pages:{type:'number'},\r",
+							"        next:{type:['string', 'null']},\r",
+							"        prev:{type:['string', 'null']}\r",
+							"        }\r",
+							"        },\r",
+							"      },\r",
+							"      results: {type: 'array', items:{type:'object'}},\r",
+							"};\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('JSON structure is valid', function () {\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rickandmortyapi.com/api/episode",
+					"protocol": "https",
+					"host": [
+						"rickandmortyapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"episode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a single episode",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"    type: 'object',\r",
+							"  properties: {\r",
+							"      id: {type: 'number'},\r",
+							"      name: {type: 'string'},\r",
+							"      air_date: {type: 'string'},\r",
+							"      episode: {type: 'string'},\r",
+							"      characters: {type: 'array', items: {type: 'string'}},\r",
+							"      url: {type: 'string'},\r",
+							"      created: {type: 'string'}\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('JSON structure is valid', function () {\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ID is valid\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.eql(20);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rickandmortyapi.com/api/episode/20",
+					"protocol": "https",
+					"host": [
+						"rickandmortyapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"episode",
+						"20"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get multiple episodes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"    type: 'array',\r",
+							"  items: {type: 'object'}\r",
+							"};\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('JSON structure is valid', function () {\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"IDs are as expected\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0].id).to.eql(3);\r",
+							"    pm.expect(jsonData[1].id).to.eql(15);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rickandmortyapi.com/api/episode/3,15",
+					"protocol": "https",
+					"host": [
+						"rickandmortyapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"episode",
+						"3,15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter episodes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"    type: 'object',\r",
+							"  properties: {\r",
+							"      info: {type: 'object', \r",
+							"      properties: {count: {type:'number'},\r",
+							"        pages:{type:'number'},\r",
+							"        next:{type:['string', 'null']},\r",
+							"        prev:{type:['string', 'null']}\r",
+							"        }\r",
+							"        },\r",
+							"      },\r",
+							"      results: {type: 'array', items:{type:'object'}},\r",
+							"};\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('JSON structure is valid', function () {\r",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Params are valid\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData.results[0].episode).to.eql('S03E10');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://rickandmortyapi.com/api/episode/?episode=S03E10",
+					"protocol": "https",
+					"host": [
+						"rickandmortyapi",
+						"com"
+					],
+					"path": [
+						"api",
+						"episode",
+						""
+					],
+					"query": [
+						{
+							"key": "episode",
+							"value": "S03E10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"});"
+				]
+			}
+		}
+	]
+}
